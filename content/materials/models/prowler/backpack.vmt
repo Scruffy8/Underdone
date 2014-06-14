@@ -1,0 +1,5 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\Prowler\backpack"
+    "$bumpmap" "models\Prowler\backpack_normal"
+    "$surfaceprop" "flesh"
+}

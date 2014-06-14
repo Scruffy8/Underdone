@@ -1,0 +1,213 @@
+
+/*--------------------------------------------------------------------------------------------
+
+   ######    ##           ##       #######    ##    ##     ########  #######      ##
+   ##   ##   ##          ####     ##          ##  ##          ##     ##          ####
+   ######    ##         ##  ##    ##          ####            ##     #######    ##  ##
+   ##   ##   ##        ########   ##          ##  ##          ##     ##        ########
+   ######    #######  ##      ##   #######    ##    ##        ##     #######  ##      ##
+ 			
+---------------------------------------------------------------------------------------------*/
+
+local barsizeh = 24
+local hgap = 5
+local curscheme = 1
+
+local drawcol = surface.SetDrawColor
+local drawrect = surface.DrawRect
+local textcol = surface.SetTextColor
+local textdraw = surface.DrawText
+local textfont = surface.SetFont
+local textpos = surface.SetTextPos
+local textsize = surface.GetTextSize
+
+local scheme = {}
+scheme[1] = {}
+scheme[1].panelcol = Color( 50, 50, 50, 255 )
+scheme[1].panelbcol = Color( 75, 75, 75, 255 )
+scheme[1].panellistcol = Color( 100, 100, 100, 255 )
+scheme[1].panelblistcol = Color( 100, 100, 100, 255 )
+scheme[1].paneltext = Color( 255, 255, 255, 255 )
+
+/*---------------------------------------------------
+ 			Black Tea VGUI : BUTTON
+ 			System Button - Doesnt care
+---------------------------------------------------*/
+
+function btDraw_Panel( x, y, w, h, col, col2 )
+	drawcol( col )
+	drawrect( x, y, w, h)
+	drawcol( col2 )
+	drawrect( x, y-5, w, 5)
+end
+
+local BUTTON = {}
+
+function BUTTON:Init()
+	self:SetSize( barsizeh, barsizeh )
+	self:SetText("")
+end
+
+function BUTTON:Paint()
+	-- close button background
+	btDraw_Panel( 0, 0, barsizeh, barsizeh, scheme[curscheme].panelcol, scheme[curscheme].panelbcol)
+	-- little x
+	textfont( "Marlett" )
+	local tx, ty = textsize( 'r' )
+	textcol( scheme[curscheme].paneltext )
+	textpos( barsizeh/2-tx/2, barsizeh/2-ty/2 )
+	textdraw( 'r' )
+end
+
+function BUTTON:DoClick()
+	self:GetParent():Close()
+end	
+
+
+vgui.Register( "BTwinclose", BUTTON, "DButton" )
+
+/*---------------------------------------------------
+ 			Black Tea VGUI : PANEL
+ 			PANEL:SetupPanel()
+ 			-- sets up panel.
+---------------------------------------------------*/
+
+local BUTTON = {}
+
+function BUTTON:Init()
+	self:SetText("")
+	self.title = "Defualt Button"
+	self.font = "Trebuchet18"
+end
+
+function BUTTON:Paint()
+	btDraw_Panel( 0, 0, barsizeh, barsizeh, scheme[curscheme].panelcol, scheme[curscheme].panelbcol)
+
+	-- little x
+	textfont( self.font )
+	local tx, ty = textsize( self.title )
+	textcol( scheme[curscheme].paneltext )
+	textpos( self:GetWide()/2-tx/2, self:GetTall()/2-ty/2 )
+	textdraw( self.title )
+end
+
+function BUTTON:DoClick()
+	-- assgin custom
+	LocalPlayer():ChatPrint( "This button is working" )
+end	
+
+
+vgui.Register( "BTbutton", BUTTON, "DButton" )
+
+/*---------------------------------------------------
+ 			Black Tea VGUI : PANEL
+ 			PANEL:SetupPanel()
+ 			-- sets up panel.
+---------------------------------------------------*/
+
+local PANEL = {}
+
+function PANEL:Init()
+	self.title = "Default Title"
+	self.font = "TargetID"
+	self.dcolor = scheme[curscheme].panelcol
+	self.nodraw = false
+end
+
+function PANEL:SetupPanel()
+	self.setpanel = true
+	self.close = vgui.Create( "BTwinclose", self )
+	self.close:SetPos( self:GetWide() - barsizeh, 0 )
+end
+
+function PANEL:SetTitle( strText )
+	self.title = strText
+end
+
+function PANEL:UpdatePanel()
+	-- set some custom panels
+end
+
+function PANEL:NoDraw( boolSet )
+	self.nodraw = boolSet
+end
+
+function PANEL:Open()
+	self:UpdatePanel()
+	self:SetVisible( true )
+end
+
+function PANEL:Close()
+	self:SetVisible( false )	
+end
+
+function PANEL:SetColor( colColor )
+	self.dcolor = colColor
+end
+
+function PANEL:ParentList( dermaList, intMargin )
+	if dermaList and dermaList:IsValid() then
+		dermaList:SetParent( self )
+		if self.setpanel then
+			dermaList:SetPos( intMargin, intMargin + barsizeh + hgap )
+			dermaList:SetSize( self:GetWide() - intMargin*2, self:GetTall() - intMargin*2 - barsizeh - hgap )
+		else
+			dermaList:SetPos( intMargin, intMargin )
+			dermaList:SetSize( self:GetWide() - intMargin*2, self:GetTall() - intMargin*2 )
+		end
+	end
+end
+
+function PANEL:Paint()	
+	if !self.nodraw then
+		if self.setpanel then
+			textfont( self.font )
+			local tx, ty = textsize( self.title )
+			textcol(  scheme[curscheme].paneltext )
+			textpos( self:GetWide()/2-tx/2, barsizeh/2-ty/2 )
+			textdraw( self.title )
+		end
+		-- okay let me get this	
+		drawcol( self.dcolor )
+		if self.setpanel then
+			drawrect( 0, barsizeh + hgap, self:GetWide(), self:GetTall() - hgap - barsizeh)
+		else
+			btDraw_Panel( 0, 0, self:GetWide(), self:GetTall(), scheme[curscheme].panelcol, scheme[curscheme].panelbcol)
+		end
+	end
+end
+vgui.Register( "BTpanel", PANEL, "Panel" )
+
+---------- Test
+if testpnl then
+	testpnl:Remove()
+	testpnl = nil
+end
+
+local scw = ScrW()
+local sch = ScrH()
+local scw_43 = sch/3*4
+	
+if !testpnl then
+	testpnl = vgui.Create( "BTpanel" )
+	testpnl:SetSize( 500, 400 )
+	testpnl:Center()
+	testpnl:SetupPanel()
+	testpnl:SetTitle( "Auction Menu" )
+	
+	/*
+	testpnl.list = vgui.Create( "BTpanel", testpnl )
+	testpnl.list:SetColor( Color( 255, 0,0, 255 ) )
+--	testpnl.list:NoDraw( true )
+	testpnl:ParentList( testpnl.list, 4 )
+	testpnl.list:SetPos( 4, 4 + barsizeh + hgap + 40 )
+	testpnl.list:SetSize( testpnl.list:GetWide(), testpnl.list:GetTall() - 40 )
+	
+	testpnl.btnlist = vgui.Create( "BTpanel", testpnl )
+	testpnl.btnlist:SetColor( Color( 100, 0,0, 255 ) )
+	testpnl.btnlist:SetPos( 4, 4 + barsizeh + hgap )
+	testpnl.btnlist:SetSize( testpnl:GetWide() - 8, 40 -5)
+	*/
+	
+	local btnlist
+end		

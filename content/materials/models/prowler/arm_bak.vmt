@@ -1,0 +1,5 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\Prowler\arm_bak"
+    "$bumpmap" "models\Prowler\arm_bak_normal"
+    "$surfaceprop" "flesh"
+}

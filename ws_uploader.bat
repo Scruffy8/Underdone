@@ -1,0 +1,1 @@
+"C:\steamserver\gmod\bin\gmpublish.exe" update -addon "C:\steamserver\gmod\bin.gma" -id "144908675" -changes "added/updated contents"

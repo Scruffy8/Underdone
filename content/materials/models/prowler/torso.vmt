@@ -1,0 +1,5 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\Prowler\torso"
+    "$bumpmap" "models\Prowler\torso_normal"
+    "$surfaceprop" "flesh"
+}

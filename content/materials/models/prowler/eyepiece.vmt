@@ -1,0 +1,5 @@
+"vertexlitgeneric" {
+    "$basetexture" "models\Prowler\eyepiece"
+    "$bumpmap" "models\Prowler\eyepiece_normal"
+    "$surfaceprop" "flesh"
+}
