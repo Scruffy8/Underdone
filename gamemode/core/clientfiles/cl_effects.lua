@@ -29,6 +29,9 @@ local EFFECT = {}
 function EFFECT:Init( data ) 
 	
 	self.Player = data:GetEntity()
+	if not IsValid(self.Player) then
+		return
+	end
 	self.Origin = data:GetOrigin()
 	self.Emitter = ParticleEmitter( self.Origin )
 	self.EffectDelay = CurTime()
@@ -146,6 +149,9 @@ local EFFECT = {}
 function EFFECT:Init( data ) 
 	
 	self.Player = data:GetEntity()
+	if not IsValid(self.Player) then
+		return
+	end
 	self.Origin = self.Player:GetPos()
 	self.DirVec = self.Player:GetUp()
 	self.Emitter = self.Player.FixedEmitterHand
@@ -172,6 +178,9 @@ local EFFECT = {}
 function EFFECT:Init( data ) 
 	
 	self.Player = data:GetEntity()
+	if not IsValid(self.Player) then
+		return
+	end
 	self.Origin = self.Player:GetPos()
 	self.DirVec = self.Player:GetUp()
 	self.Emitter = self.Player.FixedEmitterHand
