@@ -101,20 +101,24 @@ function ENT:FlyThink()
 end
 
 function ENT:Think()	
+		local ent = self or self.Entity
+		if !IsValid(ent:GetOwner()) then
+			SafeRemoveEntity(ent)
+		end
 
 		local trace = {}
-			trace.start = self.Entity:GetPos()
-			trace.endpos = self.Entity:GetPos() + self:GetForward() * self.intSpeed
-			trace.filter = { self.Entity, self:GetOwner() } 
+			trace.start = ent:GetPos()
+			trace.endpos = ent:GetPos() + ent:GetForward() * ent.intSpeed
+			trace.filter = { ent, ent:GetOwner() } 
 			local tr = util.TraceLine( trace )
 
 			if tr.HitSky then
-				self.Entity:Remove()
+				ent:Remove()
 				return true
 			end	
 			
 			
-			self.Entity:FlyThink()
+			ent:FlyThink()
 			
 			if tr.Hit then
 				if tr.Entity:IsValid() then
@@ -124,9 +128,9 @@ function ENT:Think()
 				end
 			end
 
-	self.Entity:SetPos(self.Entity:GetPos() + self:GetForward() * self.intSpeed)
+	ent:SetPos(ent:GetPos() + self:GetForward() * self.intSpeed)
 --	self.Entity:SetAngles(self.flightvector:Angle() + Angle(90,0,0))
-	self.Entity:NextThink( CurTime() )
+	ent:NextThink( CurTime() )
 	return true
 end
 
