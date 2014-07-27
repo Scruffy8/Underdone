@@ -196,16 +196,16 @@ do -- python 1320
 		if not pac.LocalPlayer:IsValid() then return end
 		
 		t = false
-		hook.Remove("Think","pac_request_outfits")
-		hook.Remove("KeyRelease", "pac_request_outfits")
+	--	hook.Remove("Think","pac_request_outfits")
+	--	hook.Remove("KeyRelease", "pac_request_outfits")
 		
-		Msg"[PAC3] " print"Requesting outfits..."
+		Msg"[PAC3] " print"Requesting outfits...NO"
 		
-		--RunConsoleCommand("pac_request_outfits")
+--		RunConsoleCommand("pac_request_outfits")
 
 	end
-
-	--[[hook.Add("Think","pac_request_outfits",function() 
+--[[
+	hook.Add("Think","pac_request_outfits",function() 
 		
 		local ft = FrameTime()
 		
@@ -219,11 +219,12 @@ do -- python 1320
 			return
 		end
 		
-	end)]]
+	end)
 
 	hook.Add("KeyRelease", "pac_request_outfits", function()	
 		if pac.LocalPlayer:IsValid() and pac.LocalPlayer:GetVelocity():Length() > 5 then
 			Initialize()
 		end
 	end)
+end]]
 end

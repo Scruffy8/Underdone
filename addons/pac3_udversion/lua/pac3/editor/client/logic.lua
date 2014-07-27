@@ -37,7 +37,7 @@ hook.Add("InitPostEntity", "pace_autoload_parts", function()
 		-- give pac some time to solve bones and parents
 			for key, part in pairs(pac.GetParts(true)) do
 				if not part:HasParent() then
-					pace.SendPartToServer(part)
+--					pace.SendPartToServer(part)
 				end
 			end
 		end)
