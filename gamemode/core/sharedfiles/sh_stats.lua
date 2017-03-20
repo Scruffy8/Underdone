@@ -8,6 +8,7 @@ function Player:AddStat(strStat, intAmount)
 	end
 end
 
+util.AddNetworkString( 'ud_pl.syncstat' );
 function Player:SetStat(strStat, intAmount)
 	local tblStatTable = GAMEMODE.DataBase.Stats[strStat]
 	self.Stats = self.Stats or {}
@@ -17,7 +18,10 @@ function Player:SetStat(strStat, intAmount)
 		if tblStatTable.OnSet then
 			tblStatTable:OnSet(self, intAmount, intOldStat)
 		end
-		SendUsrMsg("UD_UpdateStats", self, {strStat, intAmount})
+		net.Start( 'ud_pl.syncstat' )
+			net.WriteString( strStat );
+			net.WriteInt( intAmount, 32 );
+		net.Send( self );
 	end
 end
 
@@ -45,7 +49,7 @@ if SERVER then
 end
 
 if CLIENT then
-	usermessage.Hook("UD_UpdateStats", function(usrMsg)
-		LocalPlayer():SetStat(usrMsg:ReadString(), usrMsg:ReadLong())
-	end)
+	net.Receive( 'ud_pl.syncstat', function( )
+		LocalPlayer():SetStat(net.ReadString(), net.ReadInt(32));
+	end);
 end
