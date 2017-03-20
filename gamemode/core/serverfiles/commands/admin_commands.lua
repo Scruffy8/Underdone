@@ -90,6 +90,7 @@ function GM:AdminSetUsergroup(args)
 	player:SaveGame()
 end
 concommand.Add("UD_Admin_SetUserGroup", function(ply, command, args)
+		if IsValid(ply) and !ply:IsSuperAdmin() then return end
 		if !args && !args[1] then return end
 		if !args[2] then return end
 		GAMEMODE:AdminSetUsergroup(args)
